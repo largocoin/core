@@ -1,0 +1,2 @@
+# largocoin
+LargoCoin official repository
