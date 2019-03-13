@@ -1,0 +1,36 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/translations">
+        <file alias="bg">locale/largo_bg.qm</file>
+        <file alias="ca">locale/largo_ca.qm</file>
+        <file alias="cs">locale/largo_cs.qm</file>
+        <file alias="da">locale/largo_da.qm</file>
+        <file alias="de">locale/largo_de.qm</file>
+        <file alias="en">locale/largo_en.qm</file>
+        <file alias="en_US">locale/largo_en_US.qm</file>
+        <file alias="eo">locale/largo_eo.qm</file>
+        <file alias="es">locale/largo_es.qm</file>
+        <file alias="es_ES">locale/largo_es_ES.qm</file>
+        <file alias="fi">locale/largo_fi.qm</file>
+        <file alias="fr_FR">locale/largo_fr_FR.qm</file>
+        <file alias="hi_IN">locale/largo_hi_IN.qm</file>
+        <file alias="hr">locale/largo_hr.qm</file>
+        <file alias="hr_HR">locale/largo_hr_HR.qm</file>
+        <file alias="it">locale/largo_it.qm</file>
+        <file alias="ja">locale/largo_ja.qm</file>
+        <file alias="ko_KR">locale/largo_ko_KR.qm</file>
+        <file alias="lt_LT">locale/largo_lt_LT.qm</file>
+        <file alias="nl">locale/largo_nl.qm</file>
+        <file alias="pl">locale/largo_pl.qm</file>
+        <file alias="pt">locale/largo_pt.qm</file>
+        <file alias="pt_BR">locale/largo_pt_BR.qm</file>
+        <file alias="ro_RO">locale/largo_ro_RO.qm</file>
+        <file alias="ru">locale/largo_ru.qm</file>
+        <file alias="sk">locale/largo_sk.qm</file>
+        <file alias="sv">locale/largo_sv.qm</file>
+        <file alias="tr">locale/largo_tr.qm</file>
+        <file alias="uk">locale/largo_uk.qm</file>
+        <file alias="vi">locale/largo_vi.qm</file>
+        <file alias="zh_CN">locale/largo_zh_CN.qm</file>
+        <file alias="zh_TW">locale/largo_zh_TW.qm</file>
+    </qresource>
+</RCC>

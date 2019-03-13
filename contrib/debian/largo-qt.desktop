@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Largo
+Comment=Largo P2P Cryptocurrency
+Comment[fr]=Largo, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Largo, eşten eşe kriptografik sanal para birimi
+Exec=largo-qt %u
+Terminal=false
+Type=Application
+Icon=largo128
+MimeType=x-scheme-handler/largo;
+Categories=Office;Finance;
