@@ -3500,7 +3500,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>R&amp;euse an existing receiving address (not recommended)</source>
-        <translation>R &amp; euse существующего адреса получателя (не рекомендуется)</translation>
+        <translation>П&amp;ереиспользование существующего адреса получателя (не рекомендуется)</translation>
     </message>
     <message>
         <source>&amp;Message:</source>
@@ -3535,7 +3535,15 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Необязательная сумма для запроса. Оставьте это пустое или ноль, чтобы не запрашивать определенную сумму.</translation>
     </message>
     <message>
-        <source>&amp;Amount:</source>
+        <source>&amp;Address:</source>
+        <translation>&amp;Адрес:</translation>
+    </message>
+    <message>
+	<source>Your receiving address. You can copy and use it to receive coins on this wallet. A new one will be generated once it is used.</source>
+	<translation>Ваш адрес для получения монет. Вы можете скопировать его и использовать для получения монет в ваш кошелёк. Новый адрес будет сгенерирован после использования.</translation>
+    </message>
+    <message>
+        <source>A&amp;mount:</source>
         <translation>&amp;Количество:</translation>
     </message>
     <message>
@@ -3549,6 +3557,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Clear</source>
         <translation>Очистить</translation>
+    </message>
+    <message>
+        <source>Receiving Addresses</source>
+        <translation>Адреса для получения</translation>
     </message>
     <message>
         <source>Requested payments history</source>
@@ -3649,6 +3661,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Метка</translation>
     </message>
     <message>
+        <source>Address</source>
+        <translation>Адрес</translation>
+    </message>
+    <message>
         <source>Message</source>
         <translation>Сообщение</translation>
     </message>
@@ -3677,7 +3693,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>SEND</source>
-        <translation>отправить</translation>
+        <translation>ОТПРАВИТЬ</translation>
     </message>
     <message>
         <source>Coin Control Features</source>
@@ -3841,7 +3857,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>S&amp;end</source>
-        <translation>S&amp;end</translation>
+        <translation>&amp;Отправить</translation>
     </message>
     <message>
         <source>Clear all fields of the form.</source>
@@ -4248,6 +4264,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Разработчики PIVX Core</translation>
     </message>
     <message>
+        <source>The Largo Core developers</source>
+        <translation>Разработчики Largo Core</translation>
+    </message>
+    <message>
         <source>[testnet]</source>
         <translation>[тестовая сеть]</translation>
     </message>
@@ -4589,7 +4609,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Mined</source>
-        <translation>заминированный</translation>
+        <translation>добыто</translation>
     </message>
     <message>
         <source>Obfuscated</source>
@@ -4676,7 +4696,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Mined</source>
-        <translation>заминированный</translation>
+        <translation>добыто</translation>
     </message>
     <message>
         <source>Minted</source>
@@ -5269,6 +5289,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Copyright (C) 2015-%i Разработчики PIVX Core</translation>
     </message>
     <message>
+        <source>Copyright (C) 2019 The Largo Core Developers</source>
+        <translation>Copyright (C) 2019 Разработчики Largo Core</translation>
+    </message>
+    <message>
         <source>Corrupted block database detected</source>
         <translation>Обнаружена поврежденная база данных блоков</translation>
     </message>
@@ -5746,7 +5770,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Loading masternode payment cache...</source>
-        <translation>Загрузка кэша платежей в мазну ...</translation>
+        <translation>Загрузка кэша платежей в казну ...</translation>
     </message>
     <message>
         <source>Loading sporks...</source>

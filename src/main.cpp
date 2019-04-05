@@ -2,6 +2,7 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2018 The PIVX developers
+// Copyright (c) 2019 The Largo Coin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -1774,11 +1775,9 @@ int64_t GetBlockValue(int nHeight)
 {
     int64_t nSubsidy = 0;
     if (nHeight == 0) {
-      nSubsidy = 15100000 * COIN;
+	nSubsidy = 15100000 * COIN;
     } else {
-      int year = nHeight / BLOCKS_PER_YEAR;
-      if(year > 3) year = 3;
-      nSubsidy = (MASTERNODE_REWARDS[year] + STACKER_REWARD) * COIN;
+	nSubsidy = GetMasternodePayment(nHeight, 0, 2, false) + (nHeight < Params().LAST_POW_BLOCK() ? MINER_REWARD : STACKER_REWARD);
     }
     return nSubsidy;
 }
@@ -2018,11 +2017,10 @@ CAmount GetSeeSaw(const CAmount& blockValue, int nMasternodeCount, int nHeight)
     return ret;
 }
 
+//! \todo REMOVE_LATER unsed parameters (all except nHeight)
 int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCount, bool isZLRGStake)
 {
-    int year = nHeight / BLOCKS_PER_YEAR;
-    if(year > 4) year = 4;
-    return MASTERNODE_REWARDS[year] * COIN;
+    return 120 * pow(0.8, nHeight / BLOCKS_PER_YEAR) * COIN;
 }
 
 bool IsInitialBlockDownload()

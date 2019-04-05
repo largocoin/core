@@ -2,6 +2,7 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2017 The PIVX developers
+// Copyright (c) 2019 The Largo Coin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -35,9 +36,9 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     }
 
     if (pindexLast->nHeight > Params().LAST_POW_BLOCK()) {
-        uint256 bnTargetLimit = PROOF_OF_STAKE_LIMIT;
-        int64_t nTargetSpacing = BLOCKS_CREATION_TIME;
-        int64_t nTargetTimespan = BLOCK_DIFFICULTY_RECALC;
+        uint256 bnTargetLimit = Params().ProofOfStakeLimit();
+        int64_t nTargetSpacing = Params().TargetSpacing();
+        int64_t nTargetTimespan = Params().TargetTimespan();
 
         int64_t nActualSpacing = 0;
         if (pindexLast->nHeight != 0)

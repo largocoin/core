@@ -2,6 +2,7 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2018 The PIVX developers
+// Copyright (c) 2019 The Largo Coin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -17,7 +18,7 @@
 
 const uint256 GENESIS_HASH = uint256("0x00000812e3d4074e06ca53c61403d60185377d76d8b6576609a106f59ffc31cd");
 const uint256 MERKLE_ROOT_HASH = uint256("0x681cf70515b1fb7f9ca584b8688ef65c233fef9f8000c599b9f7af1a55402ddc");
-const uint256 GENESIS_TEST_HASH = uint256("0x6d8efd012a655bbbee895d14efa716c0bac6279cb268928b9984a3222868ef93");
+const uint256 GENESIS_REGTEST_HASH = uint256("0x6d8efd012a655bbbee895d14efa716c0bac6279cb268928b9984a3222868ef93");
 
 using namespace std;
 using namespace boost::assign;
@@ -57,25 +58,11 @@ static void convertSeed6(std::vector<CAddress>& vSeedsOut, const SeedSpec6* data
 // + Contains no strange transactions
 static Checkpoints::MapCheckpoints mapCheckpoints =
     boost::assign::map_list_of
-    (259201, uint256("1c9121bf9329a6234bfd1ea2d91515f19cd96990725265253f4b164283ade5dd"))
-    (424998, uint256("f31e381eedb0ed3ed65fcc98cc71f36012bee32e8efd017c4f9fb0620fd35f6b"))
-    (616764, uint256("29dd0bd1c59484f290896687b4ffb6a49afa5c498caf61967c69a541f8191557")) //first block to use modifierV2
-    (623933, uint256("c7aafa648a0f1450157dc93bd4d7448913a85b7448f803b4ab970d91fc2a7da7"))
-    (791150, uint256("8e76f462e4e82d1bd21cb72e1ce1567d4ddda2390f26074ffd1f5d9c270e5e50"))
-    (795000, uint256("4423cceeb9fd574137a18733416275a70fdf95283cc79ad976ca399aa424a443"))
-    (863787, uint256("5b2482eca24caf2a46bb22e0545db7b7037282733faa3a42ec20542509999a64"))
-    (863795, uint256("2ad866818c4866e0d555181daccc628056216c0db431f88a825e84ed4f469067"))
-    (863805, uint256("a755bd9a22b63c70d3db474f4b2b61a1f86c835b290a081bb3ec1ba2103eb4cb"))
-    (867733, uint256("03b26296bf693de5782c76843d2fb649cb66d4b05550c6a79c047ff7e1c3ae15"))
-    (879650, uint256("227e1d2b738b6cd83c46d1d64617934ec899d77cee34336a56e61b71acd10bb2"))
-    (895400, uint256("7796a0274a608fac12d400198174e50beda992c1d522e52e5b95b884bc1beac6"))//block that serial# range is enforced
-    (895991, uint256("d53013ed7ea5c325b9696c95e07667d6858f8ff7ee13fecfa90827bf3c9ae316"))//network split here
-    (908000, uint256("202708f8c289b676fceb832a079ff6b308a28608339acbf7584de533619d014d"))
-    (1142400, uint256("98aff9d605bf123247f98b1e3a02567eb5799d208d78ec30fb89737b1c1f79c5"));
+    (0, GENESIS_HASH);
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1525106065, // * UNIX timestamp of last checkpoint block
-    2498834,    // * total number of transactions between genesis and last checkpoint
+    1551178122, // * UNIX timestamp of last checkpoint block
+    0,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
 };
@@ -84,7 +71,7 @@ static Checkpoints::MapCheckpoints mapCheckpointsTestnet =
     boost::assign::map_list_of(0, uint256("0x001"));
 static const Checkpoints::CCheckpointData dataTestnet = {
     &mapCheckpointsTestnet,
-    1740710,
+    1551178122,
     0,
     250};
 
@@ -92,7 +79,7 @@ static Checkpoints::MapCheckpoints mapCheckpointsRegtest =
     boost::assign::map_list_of(0, uint256("0x001"));
 static const Checkpoints::CCheckpointData dataRegtest = {
     &mapCheckpointsRegtest,
-    1454124731,
+    1551189950,
     0,
     100};
 
@@ -132,21 +119,22 @@ public:
         pchMessageStart[3] = 0xe9;
         vAlertPubKey = ParseHex("0000098d3ba6ba6e7423fa5cbd6a89e0a9a5348f88d332b44a5cb1a8b7ed2c1eaa335fc8dc4f012cb8241cc0bdafd6ca70c5f5448916e4e6f511bcd746ed57dc50");
         nDefaultPort = 51472;
-        bnProofOfWorkLimit = ~uint256(0) >> 20; // Largo starting difficulty is 1 / 2^12
+        bnProofOfWorkLimit = PROOF_OF_WORK_LIMIT;
+        bnProofOfStakeLimit = PROOF_OF_STAKE_LIMIT;
         nSubsidyHalvingInterval = 210000;
         nMaxReorganizationDepth = 100;
         nEnforceBlockUpgradeMajority = 8100; // 75%
         nRejectBlockOutdatedMajority = 10260; // 95%
         nToCheckBlockUpgradeMajority = 10800; // Approximate expected amount of blocks in 7 days (1440*7.5)
         nMinerThreads = 0;
-        nTargetTimespan = 1 * 60; // Largo: 1 day
-        nTargetSpacing = 1 * 60;  // Largo: 1 minute
-        nMaturity = 100;
+        nTargetTimespan = BLOCK_DIFFICULTY_RECALC;
+        nTargetSpacing = BLOCKS_CREATION_TIME;
+        nMaturity = 15;
         nMasternodeCountDrift = 20;
         nMaxMoneyOut = 200000000 * COIN;
 
         /** Height or Time Based Activations **/
-        nLastPOWBlock = 1000;
+        nLastPOWBlock = 200;
         nModifierUpdateBlock = 615800;
         nZerocoinStartHeight = 0;
         nZerocoinStartTime = 1551550000; // Somewhere in the past, it has to be between genesis time and now.
@@ -198,13 +186,10 @@ public:
         assert(hashGenesisBlock == GENESIS_HASH);
         assert(genesis.hashMerkleRoot == MERKLE_ROOT_HASH);
 
-#ifdef REMOVE_LATER //! \todo Consider registering Largo own DNS seeds.
-	vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "largo.seed.fuzzbawls.pw"));     // Primary DNS Seeder from Fuzzbawls
-        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "largo.seed2.fuzzbawls.pw"));    // Secondary DNS Seeder from Fuzzbawls
-        vSeeds.push_back(CDNSSeedData("coin-server.com", "coin-server.com"));         // Single node address
-        vSeeds.push_back(CDNSSeedData("s3v3nh4cks.ddns.net", "s3v3nh4cks.ddns.net")); // Single node address
-        vSeeds.push_back(CDNSSeedData("178.254.23.111", "178.254.23.111"));           // Single node address
-#endif
+        vSeeds.push_back(CDNSSeedData("mn1.largocoin.io", "mn1.largocoin.io"));         // Masternode 1 address
+        vSeeds.push_back(CDNSSeedData("mn2.largocoin.io", "mn2.largocoin.io"));         // Masternode 2 address
+        vSeeds.push_back(CDNSSeedData("bn1.largocoin.io", "bn1.largocoin.io"));         // Base node 1 address
+        vSeeds.push_back(CDNSSeedData("bn2.largocoin.io", "bn2.largocoin.io"));         // Base node 2 address
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 30);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 13);
@@ -276,8 +261,8 @@ public:
         nRejectBlockOutdatedMajority = 5472; // 95%
         nToCheckBlockUpgradeMajority = 5760; // 4 days
         nMinerThreads = 0;
-        nTargetTimespan = 1 * 60; // Largo: 1 day
-        nTargetSpacing = 1 * 60;  // Largo: 1 minute
+        nTargetTimespan = BLOCK_DIFFICULTY_RECALC;
+        nTargetSpacing = BLOCKS_CREATION_TIME;
         nLastPOWBlock = 200;
         nMaturity = 15;
         nMasternodeCountDrift = 4;
@@ -304,11 +289,8 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-#if 0 //! \todo Consider registering Largo own DNS seeds.
-        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "largo-testnet.seed.fuzzbawls.pw"));
-        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "largo-testnet.seed2.fuzzbawls.pw"));
-        vSeeds.push_back(CDNSSeedData("s3v3nh4cks.ddns.net", "s3v3nh4cks.ddns.net"));
-#endif
+        vSeeds.push_back(CDNSSeedData("mn1_test.largocoin.io", "mn1_test.largocoin.io"));         // Masternode 1 address
+        vSeeds.push_back(CDNSSeedData("mn2_test.largocoin.io", "mn2_test.largocoin.io"));         // Masternode 2 address
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 139); // Testnet largo addresses start with 'x' or 'y'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 19);  // Testnet largo script addresses start with '8' or '9'
@@ -373,10 +355,10 @@ public:
 
         hashGenesisBlock = genesis.GetHash();
         nDefaultPort = 51476;
-        assert(hashGenesisBlock == GENESIS_TEST_HASH);
+        assert(hashGenesisBlock == GENESIS_REGTEST_HASH);
 
-        vFixedSeeds.clear(); //! Testnet mode doesn't have any fixed seeds.
-        vSeeds.clear();      //! Testnet mode doesn't have any DNS seeds.
+        vFixedSeeds.clear(); //! Regtestnet mode doesn't have any fixed seeds.
+        vSeeds.clear();      //! Regtestnet mode doesn't have any DNS seeds.
 
         fMiningRequiresPeers = false;
         fAllowMinDifficultyBlocks = true;

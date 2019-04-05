@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2018 The PIVX developers
+// Copyright (c) 2019 The Largo Coin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -82,9 +83,11 @@ BitcoinGUI::BitcoinGUI(const NetworkStyle* networkStyle, QWidget* parent) : QMai
                                                                             signMessageAction(0),
                                                                             verifyMessageAction(0),
                                                                             bip38ToolAction(0),
+#if 0 //! \todo Multisign REMOVE_LATER
                                                                             multisigCreateAction(0),
                                                                             multisigSpendAction(0),
                                                                             multisigSignAction(0),
+#endif
                                                                             aboutAction(0),
                                                                             receiveCoinsAction(0),
 #if 0 //! \todo No Zerocoin REMOVE_LATER
@@ -179,11 +182,13 @@ BitcoinGUI::BitcoinGUI(const NetworkStyle* networkStyle, QWidget* parent) : QMai
     frameBlocksLayout->setSpacing(3);
     unitDisplayControl = new UnitDisplayStatusBarControl();
     labelStakingIcon = new QLabel();
+#if 0 //! \todo No Zerocoin REMOVE_LATER
     labelAutoMintIcon = new QPushButton();
     labelAutoMintIcon->setObjectName("labelAutoMintIcon");
     labelAutoMintIcon->setFlat(true); // Make the button look like a label, but clickable
     labelAutoMintIcon->setStyleSheet(".QPushButton { background-color: rgba(255, 255, 255, 0);}");
     labelAutoMintIcon->setMaximumSize(STATUSBAR_ICONSIZE, STATUSBAR_ICONSIZE);
+#endif
     labelEncryptionIcon = new QPushButton();
     labelEncryptionIcon->setObjectName("labelEncryptionIcon");
     labelEncryptionIcon->setFlat(true); // Make the button look like a label, but clickable
@@ -204,8 +209,10 @@ BitcoinGUI::BitcoinGUI(const NetworkStyle* networkStyle, QWidget* parent) : QMai
         frameBlocksLayout->addWidget(labelEncryptionIcon);
         frameBlocksLayout->addStretch();
         frameBlocksLayout->addWidget(labelStakingIcon);
+#if 0 //! \todo No Zerocoin REMOVE_LATER
         frameBlocksLayout->addStretch();
         frameBlocksLayout->addWidget(labelAutoMintIcon);
+#endif
     }
 #endif // ENABLE_WALLET
     frameBlocksLayout->addWidget(labelTorIcon);
@@ -246,7 +253,9 @@ BitcoinGUI::BitcoinGUI(const NetworkStyle* networkStyle, QWidget* parent) : QMai
     connect(showBackupsAction, SIGNAL(triggered()), rpcConsole, SLOT(showBackups()));
     connect(labelConnectionsIcon, SIGNAL(clicked()), rpcConsole, SLOT(showPeers()));
     connect(labelEncryptionIcon, SIGNAL(clicked()), walletFrame, SLOT(toggleLockWallet()));
+#if 0 //! \todo No Zerocoin REMOVE_LATER
     connect(labelAutoMintIcon, SIGNAL(clicked()), this, SLOT(optionsClicked()));
+#endif
 
     // Get restart command-line parameters and handle restart
     connect(rpcConsole, SIGNAL(handleRestart(QStringList)), this, SLOT(handleRestart(QStringList)));
@@ -273,10 +282,12 @@ BitcoinGUI::BitcoinGUI(const NetworkStyle* networkStyle, QWidget* parent) : QMai
     timerStakingIcon->start(10000);
     setStakingStatus();
 
+#if 0 //! \todo No Zerocoin REMOVE_LATER
     QTimer* timerAutoMintIcon = new QTimer(labelAutoMintIcon);
     connect(timerAutoMintIcon, SIGNAL(timeout()), this, SLOT(setAutoMintStatus()));
     timerAutoMintIcon->start(10000);
     setAutoMintStatus();
+#endif
 }
 
 BitcoinGUI::~BitcoinGUI()
@@ -447,13 +458,14 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     usedReceivingAddressesAction = new QAction(QIcon(":/icons/address-book"), tr("&Receiving addresses..."), this);
     usedReceivingAddressesAction->setStatusTip(tr("Show the list of used receiving addresses and labels"));
 
+#if 0 //! \todo Multisign REMOVE_LATER
     multisigCreateAction = new QAction(QIcon(":/icons/address-book"), tr("&Multisignature creation..."), this);
     multisigCreateAction->setStatusTip(tr("Create a new multisignature address and add it to this wallet"));
     multisigSpendAction = new QAction(QIcon(":/icons/send"), tr("&Multisignature spending..."), this);
     multisigSpendAction->setStatusTip(tr("Spend from a multisignature address"));
     multisigSignAction = new QAction(QIcon(":/icons/editpaste"), tr("&Multisignature signing..."), this);
     multisigSignAction->setStatusTip(tr("Sign with a multisignature address"));
-
+#endif    
     openAction = new QAction(QApplication::style()->standardIcon(QStyle::SP_FileIcon), tr("Open &URI..."), this);
     openAction->setStatusTip(tr("Open a Largo: URI or payment request"));
     openBlockExplorerAction = new QAction(QIcon(":/icons/explorer"), tr("&Blockchain explorer"), this);
@@ -483,9 +495,11 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
         connect(usedReceivingAddressesAction, SIGNAL(triggered()), walletFrame, SLOT(usedReceivingAddresses()));
         connect(openAction, SIGNAL(triggered()), this, SLOT(openClicked()));
         connect(multiSendAction, SIGNAL(triggered()), this, SLOT(gotoMultiSendDialog()));
+#if 0 //! \todo Multisign REMOVE_LATER
         connect(multisigCreateAction, SIGNAL(triggered()), this, SLOT(gotoMultisigCreate()));
         connect(multisigSpendAction, SIGNAL(triggered()), this, SLOT(gotoMultisigSpend()));
         connect(multisigSignAction, SIGNAL(triggered()), this, SLOT(gotoMultisigSign()));
+#endif
     }
 #endif // ENABLE_WALLET
 }
@@ -511,10 +525,12 @@ void BitcoinGUI::createMenuBar()
         file->addAction(usedSendingAddressesAction);
         file->addAction(usedReceivingAddressesAction);
         file->addSeparator();
+#if 0 //! \todo Multisign REMOVE_LATER
         file->addAction(multisigCreateAction);
         file->addAction(multisigSpendAction);
         file->addAction(multisigSignAction);
         file->addSeparator();
+#endif
     }
     file->addAction(quitAction);
 
@@ -627,7 +643,9 @@ void BitcoinGUI::setClientModel(ClientModel* clientModel)
         }
 #endif // ENABLE_WALLET
         unitDisplayControl->setOptionsModel(clientModel->getOptionsModel());
+#if 0 //! \todo No Zerocoin REMOVE_LATER
         connect(clientModel->getOptionsModel(), SIGNAL(zeromintEnableChanged(bool)), this, SLOT(setAutoMintStatus()));
+#endif
 
         //Show trayIcon
         if (trayIcon)
@@ -687,9 +705,11 @@ void BitcoinGUI::setWalletActionsEnabled(bool enabled)
     changePassphraseAction->setEnabled(enabled);
     signMessageAction->setEnabled(enabled);
     verifyMessageAction->setEnabled(enabled);
+#if 0 //! \todo Multisign REMOVE_LATER
     multisigCreateAction->setEnabled(enabled);
     multisigSpendAction->setEnabled(enabled);
     multisigSignAction->setEnabled(enabled);
+#endif
     bip38ToolAction->setEnabled(enabled);
     usedSendingAddressesAction->setEnabled(enabled);
     usedReceivingAddressesAction->setEnabled(enabled);
@@ -856,6 +876,7 @@ void BitcoinGUI::gotoVerifyMessageTab(QString addr)
     if (walletFrame) walletFrame->gotoVerifyMessageTab(addr);
 }
 
+#if 0 //! \todo Multisign REMOVE_LATER
 void BitcoinGUI::gotoMultisigCreate()
 {
     if(walletFrame) walletFrame->gotoMultisigDialog(0);
@@ -870,7 +891,7 @@ void BitcoinGUI::gotoMultisigSign()
 {
     if(walletFrame) walletFrame->gotoMultisigDialog(2);
 }
-
+#endif
 void BitcoinGUI::gotoBip38Tool()
 {
     if (walletFrame) walletFrame->gotoBip38Tool();
@@ -1201,6 +1222,7 @@ void BitcoinGUI::setStakingStatus()
     }
 }
 
+#if 0 //! \todo No Zerocoin REMOVE_LATER
 void BitcoinGUI::setAutoMintStatus()
 {
     if (walletFrame) {
@@ -1217,6 +1239,7 @@ void BitcoinGUI::setAutoMintStatus()
         }
     }
 }
+#endif
 
 bool BitcoinGUI::handlePaymentRequest(const SendCoinsRecipient& recipient)
 {

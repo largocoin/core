@@ -2219,6 +2219,10 @@ Please check the address and try again.</source>
         <translation>PIVX core kehittäjät</translation>
     </message>
     <message>
+        <source>The Largo Core developers</source>
+        <translation>Largo core kehittäjät</translation>
+    </message>
+    <message>
         <source>[testnet]</source>
         <translation>[testnet]</translation>
     </message>

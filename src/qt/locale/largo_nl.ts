@@ -4249,6 +4249,10 @@ Ofwel het munten van hogere denominaties (dus minder invoer nodig) of het te bes
         <translation>De PIVX Kernontwikkelaars</translation>
     </message>
     <message>
+        <source>The Largo Core developers</source>
+        <translation>De Largo Kernontwikkelaars</translation>
+    </message>
+    <message>
         <source>[testnet]</source>
         <translation>[testnet]</translation>
     </message>
@@ -5268,6 +5272,10 @@ Ofwel het munten van hogere denominaties (dus minder invoer nodig) of het te bes
     <message>
         <source>Copyright (C) 2015-%i The PIVX Core Developers</source>
         <translation>Copyright (C) 2015-%i The PIVX Kernontwikkelaars</translation>
+    </message>
+    <message>
+        <source>Copyright (C) 2019 The Largo Core Developers</source>
+        <translation>Copyright (C) 2019 The Largo Kernontwikkelaars</translation>
     </message>
     <message>
         <source>Corrupted block database detected</source>

@@ -3131,6 +3131,10 @@ https://www.transifex.com/largo-project/largo-project-translations</translation>
         <translation>Os desenvolvedores do PIVX Core</translation>
     </message>
     <message>
+        <source>The Largo Core developers</source>
+        <translation>Os desenvolvedores do Largo Core</translation>
+    </message>
+    <message>
         <source>[testnet]</source>
         <translation>[testnet]</translation>
     </message>
@@ -3793,7 +3797,11 @@ https://www.transifex.com/largo-project/largo-project-translations</translation>
     </message>
     <message>
         <source>Copyright (C) 2015-%i The PIVX Core Developers</source>
-        <translation>Todos os direitos reservados (C) 2015-%i aos Desenvolvedores do Largo Core</translation>
+        <translation>Todos os direitos reservados (C) 2015-%i aos Desenvolvedores do PIVX Core</translation>
+    </message>
+    <message>
+        <source>Copyright (C) 2019 The Largo Core Developers</source>
+        <translation>Todos os direitos reservados (C) 2019 aos Desenvolvedores do Largo Core</translation>
     </message>
     <message>
         <source>Corrupted block database detected</source>

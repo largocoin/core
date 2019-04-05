@@ -4237,6 +4237,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>PIVX Core разработчици</translation>
     </message>
     <message>
+        <source>The Largo Core developers</source>
+        <translation>Largo Core разработчици</translation>
+    </message>
+    <message>
         <source>[testnet]</source>
         <translation>[тестнет]</translation>
     </message>
@@ -5251,6 +5255,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Copyright (C) 2015-%i The PIVX Core Developers</source>
+        <translation>Всички права запазени (c) 2015-%i PIVX Core разработчици</translation>
+    </message>
+    <message>
+        <source>Copyright (C) 2015-%i The Largo Core Developers</source>
         <translation>Всички права запазени (c) 2015-%i Largo Core разработчици</translation>
     </message>
     <message>

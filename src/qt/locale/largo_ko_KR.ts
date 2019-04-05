@@ -4249,6 +4249,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>PIVX Core 개발자</translation>
     </message>
     <message>
+        <source>The Largo Core developers</source>
+        <translation>Largo Core 개발자</translation>
+    </message>
+    <message>
         <source>[testnet]</source>
         <translation>[테스트넷]</translation>
     </message>
@@ -5269,6 +5273,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Copyright (C) 2015-%i The PIVX Core Developers</source>
         <translation>Copyright (C) 2015-%i The PIVX Core 개발자</translation>
+    </message>
+    <message>
+        <source>Copyright (C) 2019 The Largo Core Developers</source>
+        <translation>Copyright (C) 2019 The Largo Core 개발자</translation>
     </message>
     <message>
         <source>Corrupted block database detected</source>

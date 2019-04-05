@@ -3296,6 +3296,10 @@ https://www.transifex.com/largo-project/largo-project-translations</translation>
         <translation>The PIVX Core developers</translation>
     </message>
     <message>
+        <source>The Largo Core developers</source>
+        <translation>The Largo Core developers</translation>
+    </message>
+    <message>
         <source>[testnet]</source>
         <translation>[testnet]</translation>
     </message>
@@ -4284,6 +4288,10 @@ for example: alertnotify=echo %%s | mail -s "Largo Alert" admin@foo.com
     <message>
         <source>Copyright (C) 2015-%i The PIVX Core Developers</source>
         <translation>Copyright (C) 2015-%i The PIVX Core Developers</translation>
+    </message>
+    <message>
+        <source>Copyright (C) 2019 The Largo Core Developers</source>
+        <translation>Copyright (C) 2019 The Largo Core Developers</translation>
     </message>
     <message>
         <source>Corrupted block database detected</source>

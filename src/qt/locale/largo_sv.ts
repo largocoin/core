@@ -4165,6 +4165,10 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>PIVX Core utvecklarna</translation>
     </message>
     <message>
+        <source>The Largo Core developers</source>
+        <translation>Largo Core utvecklarna</translation>
+    </message>
+    <message>
         <source>[testnet]</source>
         <translation>[testnet]</translation>
     </message>
@@ -5184,6 +5188,10 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     <message>
         <source>Copyright (C) 2015-%i The PIVX Core Developers</source>
         <translation>Copyright (C) 2015-%i The PIVX Core Developers</translation>
+    </message>
+    <message>
+        <source>Copyright (C) 2019 The Largo Core Developers</source>
+        <translation>Copyright (C) 2019 The Largo Core Developers</translation>
     </message>
     <message>
         <source>Corrupted block database detected</source>

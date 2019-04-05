@@ -4240,6 +4240,10 @@ Präge entweder höhere Stückelungen (damit weniger Eingaben benötigt werdenn)
         <translation>Die PIVX Core Entwickler</translation>
     </message>
     <message>
+        <source>The Largo Core developers</source>
+        <translation>Die Largo Core Entwickler</translation>
+    </message>
+    <message>
         <source>[testnet]</source>
         <translation>[Testnetzwerk]</translation>
     </message>
@@ -5259,6 +5263,10 @@ Präge entweder höhere Stückelungen (damit weniger Eingaben benötigt werdenn)
     <message>
         <source>Copyright (C) 2015-%i The PIVX Core Developers</source>
         <translation>Copyright (C) 2015-%i The PIVX Core Developers</translation>
+    </message>
+    <message>
+        <source>Copyright (C) 2019 The Largo Core Developers</source>
+        <translation>Copyright (C) 2019 The Largo Core Developers</translation>
     </message>
     <message>
         <source>Corrupted block database detected</source>

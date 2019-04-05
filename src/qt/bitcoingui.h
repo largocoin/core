@@ -1,5 +1,6 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2017-2018 The PIVX developers
+// Copyright (c) 2019 The Largo Coin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -84,7 +85,9 @@ private:
 
     UnitDisplayStatusBarControl* unitDisplayControl;
     QLabel* labelStakingIcon;
+#if 0 //! \todo No Zerocoin REMOVE_LATER
     QPushButton* labelAutoMintIcon;
+#endif
     QPushButton* labelEncryptionIcon;
     QLabel* labelTorIcon;
     QPushButton* labelConnectionsIcon;
@@ -104,9 +107,11 @@ private:
     QAction* signMessageAction;
     QAction* verifyMessageAction;
     QAction* bip38ToolAction;
+#if 0 //! \todo Multisign REMOVE_LATER
     QAction* multisigCreateAction;
     QAction* multisigSpendAction;
     QAction* multisigSignAction;
+#endif
     QAction* aboutAction;
     QAction* receiveCoinsAction;
 #if 0 //! \todo No Zerocoin REMOVE_LATER
@@ -187,7 +192,9 @@ public slots:
 
 #ifdef ENABLE_WALLET
     void setStakingStatus();
+#if 0 //! \todo No Zerocoin REMOVE_LATER
     void setAutoMintStatus();
+#endif
 
     /** Set the encryption status as shown in the UI.
        @param[in] status            current encryption status
@@ -230,10 +237,12 @@ private slots:
     void gotoVerifyMessageTab(QString addr = "");
     /** Show MultiSend Dialog */
     void gotoMultiSendDialog();
+#if 0 //! \todo Multisign REMOVE_LATER
     /** Show MultiSig Dialog */
     void gotoMultisigCreate();
     void gotoMultisigSpend();
     void gotoMultisigSign();
+#endif
     /** Show BIP 38 tool - default to Encryption tab */
     void gotoBip38Tool();
 
