@@ -16,7 +16,7 @@ Largo Core Core official repository
   <tr><td>POS block reward</td><td>0.1 LRG</td></tr>
 </table>
 
-### Licks
+### Links
 <table>
   <tr><td>Coin website</td><td>https://largocoin.io</td></tr>
   <tr><td>Coin web wallet</td><td>https://web.largocoin.io</td></tr>
