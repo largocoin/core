@@ -1,4 +1,4 @@
-<!DOCTYPE RCC><RCC version="1.0">
+<RCC>
     <qresource prefix="/icons">
         <file alias="bitcoin">res/icons/bitcoin.png</file>
         <file alias="address-book">res/icons/address-book.png</file>
@@ -59,6 +59,37 @@
         <file alias="explorer">res/icons/explorer.png</file>
         <file alias="automint_inactive">res/icons/automint_inactive.png</file>
         <file alias="onion">res/icons/onion.png</file>
+        <file alias="menu_settings_bip38">res/icons/new/Manu_Settings/bip38.png</file>
+        <file alias="menu_settings_code">res/icons/new/Manu_Settings/code.png</file>
+        <file alias="menu_settings_multisend">res/icons/new/Manu_Settings/miltisend.png</file>
+        <file alias="menu_settings_settings">res/icons/new/Manu_Settings/settings.png</file>
+        <file alias="menu_settings_wallet">res/icons/new/Manu_Settings/wallet.png</file>
+        <file alias="menu_file_address1">res/icons/new/Menu_File/addreses1.png</file>
+        <file alias="menu_file_address2">res/icons/new/Menu_File/addreses2.png</file>
+        <file alias="menu_file_check">res/icons/new/Menu_File/check.png</file>
+        <file alias="menu_file_copy">res/icons/new/Menu_File/copy.png</file>
+        <file alias="menu_file_exit">res/icons/new/Menu_File/exit.png</file>
+        <file alias="menu_file_open">res/icons/new/Menu_File/open.png</file>
+        <file alias="menu_file_write">res/icons/new/Menu_File/write.png</file>
+        <file alias="menu_help_about">res/icons/new/Menu_Help/about.png</file>
+        <file alias="menu_help_qt">res/icons/new/Menu_Help/qt.png</file>
+        <file alias="menu_information_console">res/icons/new/Menu_Information/console.png</file>
+        <file alias="menu_information_help">res/icons/new/Menu_Information/help.png</file>
+        <file alias="menu_information_info">res/icons/new/Menu_Information/info.png</file>
+        <file alias="menu_information_list">res/icons/new/Menu_Information/list.png</file>
+        <file alias="menu_information_monitor">res/icons/new/Menu_Information/monitor.png</file>
+        <file alias="menu_information_open_file_masternodes">res/icons/new/Menu_Information/open file maternods.png</file>
+        <file alias="menu_information_open_file_settings">res/icons/new/Menu_Information/open file settings.png</file>
+        <file alias="menu_information_repair">res/icons/new/Menu_Information/repair.png</file>
+        <file alias="menu_information_show_copies">res/icons/new/Menu_Information/show copies.png</file>
+        <file alias="transaction_mined">res/icons/new/Gift.png</file>
+        <file alias="main_dashboard">res/icons/new/Menu_Dashboard.png</file>
+        <file alias="main_masternodes">res/icons/new/Menu_Masternods.png</file>
+        <file alias="main_receive">res/icons/new/Menu_Receive.png</file>
+        <file alias="main_send">res/icons/new/Menu_Send.png</file>
+        <file alias="main_history">res/icons/new/Menu_Transactions.png</file>
+        <file alias="transaction_input">res/icons/new/Receive.png</file>
+        <file alias="transaction_output">res/icons/new/Send.png</file>
     </qresource>
     <qresource prefix="/css">
         <file alias="default">res/css/default.css</file>
