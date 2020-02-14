@@ -5289,8 +5289,8 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Copyright (C) 2015-%i Разработчики PIVX Core</translation>
     </message>
     <message>
-        <source>Copyright (C) 2019 The Largo Core Developers</source>
-        <translation>Copyright (C) 2019 Разработчики Largo Core</translation>
+        <source>Copyright (C) 2019-%i The Largo Core Developers</source>
+        <translation>Copyright (C) 2019-%i Разработчики Largo Core</translation>
     </message>
     <message>
         <source>Corrupted block database detected</source>
