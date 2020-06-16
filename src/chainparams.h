@@ -27,6 +27,39 @@ struct CDNSSeedData {
     CDNSSeedData(const std::string& strName, const std::string& strHost) : name(strName), host(strHost) {}
 };
 
+struct CBlackListEntry {
+    std::string address;
+    int startHeight;
+    CBlackListEntry(const std::string& strAddress = std::string(), int nStartHeight = 0) : address(strAddress), startHeight(nStartHeight) {}
+    ADD_SERIALIZE_METHODS;
+
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
+    {
+        READWRITE(address);
+        READWRITE(startHeight);
+    }
+};
+struct CBlackList {
+    int64_t timestamp;
+    std::vector<unsigned char> signature;
+    std::vector<CBlackListEntry> addresses;
+    CBlackList(time_t tTimestamp = 0) : timestamp(tTimestamp) {}
+    CBlackList(const std::vector<unsigned char>& strSignature, time_t tTimestamp = 0) : timestamp(tTimestamp), signature(strSignature) {}
+    bool HasAddress(const std::string& addr, int blockHeight = -1) const;
+    std::string SigningData() const;
+    void SetAsCurrent() const;
+    ADD_SERIALIZE_METHODS;
+
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
+    {
+        READWRITE(timestamp);
+        READWRITE(signature);
+        READWRITE(addresses);
+    }
+};
+
 /**
  * CChainParams defines various tweakable parameters of a given instance of the
  * Largo system. There are three: the main network on which people trade goods
@@ -92,6 +125,9 @@ public:
     const std::vector<CDNSSeedData>& DNSSeeds() const { return vSeeds; }
     const std::vector<unsigned char>& Base58Prefix(Base58Type type) const { return base58Prefixes[type]; }
     const std::vector<CAddress>& FixedSeeds() const { return vFixedSeeds; }
+    const std::vector<CBlackListEntry>& BlackListedAddresses() const { return blackList.addresses; }
+    const CBlackList& BlackList() const { return blackList; }
+    void SetBlackList(const CBlackList& bl);
     virtual const Checkpoints::CCheckpointData& Checkpoints() const = 0;
     int PoolMaxTransactions() const { return nPoolMaxTransactions; }
 
@@ -154,6 +190,7 @@ protected:
     CAmount nMaxMoneyOut;
     int nMinerThreads;
     std::vector<CDNSSeedData> vSeeds;
+    CBlackList blackList;
     std::vector<unsigned char> base58Prefixes[MAX_BASE58_TYPES];
     CBaseChainParams::Network networkID;
     std::string strNetworkID;

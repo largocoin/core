@@ -2947,6 +2947,11 @@ bool CWallet::CreateTransaction(const vector<pair<CScript, CAmount> >& vecSend,
             }
         }
     }
+    CValidationState state;
+    if(IsTxAddressBlacklisted(wtxNew, state)) {
+	strFailReason = _("Address is blacklisted");
+	return false;
+    }
     return true;
 }
 

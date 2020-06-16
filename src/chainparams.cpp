@@ -11,10 +11,13 @@
 #include "random.h"
 #include "util.h"
 #include "utilstrencodings.h"
+#include "masternodeman.h" //!< \todo This & below is for MN signature verification in CBlackList. Maybe move it somewhere?
+#include "obfuscation.h"
 
 #include <assert.h>
 
 #include <boost/assign/list_of.hpp>
+#include <fstream>
 
 const uint256 GENESIS_HASH = uint256("0x00000812e3d4074e06ca53c61403d60185377d76d8b6576609a106f59ffc31cd");
 const uint256 MERKLE_ROOT_HASH = uint256("0x681cf70515b1fb7f9ca584b8688ef65c233fef9f8000c599b9f7af1a55402ddc");
@@ -82,6 +85,8 @@ static const Checkpoints::CCheckpointData dataRegtest = {
     1551189950,
     0,
     100};
+
+void CChainParams::SetBlackList(const CBlackList& bl) { blackList = bl; }
 
 libzerocoin::ZerocoinParams* CChainParams::Zerocoin_Params(bool useModulusV1) const
 {
@@ -458,4 +463,33 @@ bool SelectParamsFromCommandLine()
 
     SelectParams(network);
     return true;
+}
+
+bool CBlackList::HasAddress(const std::string& addr, int blockHeight) const {
+    if(blockHeight < 0) {
+	BOOST_FOREACH(const CBlackListEntry& entry, addresses)
+	    if(entry.address == addr)
+		return true;
+    }
+    else
+	BOOST_FOREACH(const CBlackListEntry& entry, addresses)
+	    if(entry.address == addr && entry.startHeight <= blockHeight)
+		return true;
+    return false;
+}
+
+std::string CBlackList::SigningData() const
+{
+    std::string data = std::to_string(timestamp) + '\n';
+    BOOST_FOREACH( const CBlackListEntry& addr, addresses ) data += addr.address + ' ' + std::to_string(addr.startHeight) + '\n';
+    return data;
+}
+void CBlackList::SetAsCurrent() const
+{
+    if( !pCurrentParams )
+    {
+	LogPrintf( "CBlackList::SetAsCurrent : No current chain params.\n" );
+	return;
+    }
+    pCurrentParams->SetBlackList(*this);
 }

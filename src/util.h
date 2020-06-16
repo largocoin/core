@@ -34,6 +34,7 @@
 //Largo only features
 
 extern bool fMasterNode;
+extern bool fBlackListMaster; // This is the main masternode for the wallets black list.
 extern bool fLiteMode;
 extern bool fEnableSwiftTX;
 extern int nSwiftTXDepth;

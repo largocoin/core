@@ -12,7 +12,10 @@
  * network protocol versioning
  */
 
-static const int PROTOCOL_VERSION = 70914;
+static const int PROTOCOL_VERSION = 70915;
+
+//! In this version blacklist was introduced.
+static const int MIN_BLACK_LIST_PROTO_VERSION = 70915;
 
 //! initial proto version, to be increased after version/verack negotiation
 static const int INIT_PROTO_VERSION = 209;

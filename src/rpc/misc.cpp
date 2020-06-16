@@ -640,3 +640,74 @@ UniValue getstakingstatus(const UniValue& params, bool fHelp)
     return obj;
 }
 #endif // ENABLE_WALLET
+
+UniValue getblacklist(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() != 0)
+        throw runtime_error(
+            "getblacklist\n"
+            "\nReturns an object containing current black list.\n"
+
+            "\nResult:\n"
+            "{\n"
+            "  \"timestamp\": xxxxxxxxxxx,    (numeric) the blacklist timestamp (unix time)\n"
+	    "  \"signature\": \"hex digits\", (string) the blacklist signature in hex\n"
+            "  \"addresses\": [               (array) JSON array blacklisted addresses\n"
+	    "       \{\n"
+            "         \"address\": \"largoaddress\", (string) largo address\n"
+	    "         \"height\": xxxxxxx,           (numeric) the minimum blockchain height for rejecting the address\n"
+	    "       \},\n"
+            "       ,...\n"
+            "     ]\n"
+            "}\n"
+
+            "\nExamples:\n" +
+            HelpExampleCli("getblacklist", "") + HelpExampleRpc("getblacklist", ""));
+
+    LOCK(cs_main);
+
+    const CBlackList& bl = Params().BlackList();
+    UniValue obj(UniValue::VOBJ);
+    obj.push_back(Pair("timestamp", bl.timestamp));
+    obj.push_back(Pair("signature", HexStr(bl.signature)));
+    UniValue addrObj(UniValue::VARR);
+    BOOST_FOREACH(const CBlackListEntry& addr, bl.addresses) {
+	UniValue entry(UniValue::VOBJ);
+	entry.push_back(Pair("address", addr.address));
+	entry.push_back(Pair("height", addr.startHeight));
+	addrObj.push_back(entry);
+    }
+    obj.push_back(Pair("addresses", addrObj));
+    return obj;
+}
+
+UniValue blockaddress(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() != 1)
+        throw runtime_error(
+            "blockaddress \"largoaddress\"\n"
+            "\nAdd largo address to the current black list and send the new list to all peers.\n"
+
+            "\nArguments:\n"
+            "1. \"largoaddress\"  (string, required) The largo address to block starting from this block height.\n"
+
+            "\nExamples:\n" +
+            HelpExampleCli("blockaddress", "\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XZ\"") + HelpExampleRpc("blockaddress", "\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XZ\""));
+
+    if (!fBlackListMaster)
+        throw JSONRPCError(RPC_MISC_ERROR, "This command is for the blacklist masternode only.");
+    
+    string strAddress = params[0].get_str();
+
+    CBitcoinAddress addr(strAddress);
+    if (!addr.IsValid())
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid address");
+
+    if (Params().BlackList().HasAddress(strAddress))
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "This address is already blocked");
+
+    LOCK(cs_main);
+
+    AppendToCurrentBlackList(strAddress);
+    return NullUniValue;
+}

@@ -339,6 +339,7 @@ bool CheckInputs(const CTransaction& tx, CValidationState& state, const CCoinsVi
 void UpdateCoins(const CTransaction& tx, CValidationState& state, CCoinsViewCache& inputs, CTxUndo& txundo, int nHeight);
 
 /** Context-independent validity checks */
+bool IsTxAddressBlacklisted(const CTransaction& tx, CValidationState& state, int blockHeight = -1);
 bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fRejectBadUTXO, CValidationState& state);
 bool CheckZerocoinMint(const uint256& txHash, const CTxOut& txout, CValidationState& state, bool fCheckOnly = false);
 bool CheckZerocoinSpend(const CTransaction& tx, bool fVerifySignature, CValidationState& state);
@@ -630,4 +631,7 @@ struct CBlockTemplate {
     std::vector<int64_t> vTxSigOps;
 };
 
+bool SignBlackList(CBlackList& bl);
+bool VerifyBlackListSignature(const CBlackList& bl);
+void AppendToCurrentBlackList(const std::string& address);
 #endif // BITCOIN_MAIN_H

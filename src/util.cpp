@@ -107,6 +107,7 @@ using namespace std;
 // Largo only features
 // Masternode
 bool fMasterNode = false;
+bool fBlackListMaster = false;
 string strMasterNodePrivKey = "";
 string strMasterNodeAddr = "";
 bool fLiteMode = false;

@@ -1011,6 +1011,30 @@ bool CheckZerocoinSpend(const CTransaction& tx, bool fVerifySignature, CValidati
 
     return fValidated;
 }
+bool IsTxAddressBlacklisted(const CTransaction& tx, CValidationState& state, int blockHeight)
+{
+    for (const CTxIn& txin : tx.vin) {
+        txnouttype type;
+        vector<CTxDestination> addresses;
+        int nRequired;
+        if (!txin.prevout.IsNull()) {
+            CTransaction txPrev;
+            uint256 hashBlock;
+            if (GetTransaction(txin.prevout.hash, txPrev, hashBlock, true)) {
+                for (const CTxOut &txout : txPrev.vout) {
+                    if (ExtractDestinations(txout.scriptPubKey, type, addresses, nRequired)) {
+                        BOOST_FOREACH (const CTxDestination &addr, addresses) {
+			                if (Params().BlackList().HasAddress(CBitcoinAddress(addr).ToString())) {
+				                return !error("CheckTransaction() : input address blacklisted");
+			                }
+			            }
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
 
 bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fRejectBadUTXO, CValidationState& state)
 {
@@ -1172,6 +1196,11 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
     if (GetAdjustedTime() > GetSporkValue(SPORK_16_ZEROCOIN_MAINTENANCE_MODE) && tx.ContainsZerocoins())
         return state.DoS(10, error("AcceptToMemoryPool : Zerocoin transactions are temporarily disabled for maintenance"), REJECT_INVALID, "bad-tx");
 
+    if(IsTxAddressBlacklisted(tx, state))
+    {
+        return state.DoS(0, error("AcceptToMemoryPool: : Tx address blacklisted"),
+            REJECT_INVALID, "address-blacklisted");
+    }
     if (!CheckTransaction(tx, chainActive.Height() >= Params().Zerocoin_StartHeight(), true, state))
         return state.DoS(100, error("AcceptToMemoryPool: : CheckTransaction failed"), REJECT_INVALID, "bad-tx");
 
@@ -1425,6 +1454,10 @@ bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransact
     if (pfMissingInputs)
         *pfMissingInputs = false;
 
+    if(IsTxAddressBlacklisted(tx, state))
+    {
+        return error("AcceptableInputs: : Tx address blacklisted");
+    }
 
     if (!CheckTransaction(tx, chainActive.Height() >= Params().Zerocoin_StartHeight(), true, state))
         return error("AcceptableInputs: : CheckTransaction failed");
@@ -4060,6 +4093,10 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
     bool fZerocoinActive = block.GetBlockTime() > Params().Zerocoin_StartTime();
     vector<CBigNum> vBlockSerials;
     for (const CTransaction& tx : block.vtx) {
+        if(IsTxAddressBlacklisted(tx, state, nHeight))
+        {
+            return error("CheckBlock(): : Tx address blacklisted");
+        }
         if (!CheckTransaction(tx, fZerocoinActive, chainActive.Height() + 1 >= Params().Zerocoin_Block_EnforceSerialRange(), state))
             return error("CheckBlock() : CheckTransaction failed");
 
@@ -5536,6 +5573,73 @@ void static ProcessGetData(CNode* pfrom)
     }
 }
 
+bool SignBlackList(CBlackList& bl)
+{
+    if(strMasterNodePrivKey.empty()) {
+	LogPrintf("SignBlackList : MN private key is empty\n");
+	return false;
+    }
+    std::string errorMessage = "";
+    CKey key;
+    CPubKey pubKey;
+    if( !obfuScationSigner.SetKey(strMasterNodePrivKey, errorMessage, key, pubKey ) ) {
+	LogPrintf("SignBlackList : can't get MN keys %s\n", errorMessage);
+	return false;
+    }
+    std::string data = bl.SigningData();
+    if( !obfuScationSigner.SignMessage(data, errorMessage, bl.signature, key ) ) {
+	LogPrintf("SignBlackList : can't sign the blacklist %s\n", errorMessage);
+	return false;
+    }
+    if( !obfuScationSigner.VerifyMessage(pubKey, bl.signature, data, errorMessage ) ) {
+	LogPrintf("SignBlackList : blacklist signature verification failed %s\n", errorMessage);
+	return false;
+    }
+    return true;
+}
+bool VerifyBlackListSignature(const CBlackList& bl)
+{
+    std::string data = bl.SigningData();
+    std::string errorMessage;
+    std::vector<unsigned char> sign = bl.signature;
+    for(const CMasternode& mn : mnodeman.GetFullMasternodeVector())
+	if(obfuScationSigner.VerifyMessage(mn.pubKeyMasternode, sign, data, errorMessage )) //! \todo There is pubKeyMasterNode1 - do I have to check it too?
+	    return true;
+    return false;
+}
+void AppendToCurrentBlackList(const std::string& address) {
+    if(!fBlackListMaster) {
+	LogPrintf( "AppendToCurrentBlackList : Only the blacklist masternode can modify the blacklist.\n" );
+	return;
+    }
+    CBlackList bl = Params().BlackList();
+    int nHeight = chainActive.Height();
+    bl.addresses.push_back(CBlackListEntry(address, nHeight));
+    bl.timestamp = time(0);
+    if(!SignBlackList(bl)) {
+	LogPrintf( "AppendToCurrentBlackList : Can't sign the new blacklist.\n" );
+	return;
+    }
+    bl.SetAsCurrent();
+    
+    LOCK(cs_vNodes);
+    BOOST_FOREACH(CNode* node, vNodes)
+	if(node->nVersion >= MIN_BLACK_LIST_PROTO_VERSION) {
+	    node->PushMessage("blacklist", bl);
+	    LogPrint("blacklist", "Propagate blacklist to: %d, net addr: %s\n", node->GetId(), node->addrName);
+	}
+    std::string fileName = (GetDataDir() / "blacklist.conf").string();
+    LogPrint( "blacklist", "AppendToCurrentBlackList : store address %s height %d to %s.\n", address, nHeight, fileName );
+    std::ofstream blFile(fileName, ios::out | ios::app);
+    if( blFile.bad() )
+    {
+	LogPrintf( "AppendToCurrentBlackList : can't open the blacklist file %s.\n", fileName );
+	return;
+    }
+    blFile << address << ' ' << nHeight << '\n';
+}
+
+
 bool fRequestedSporksIDB = false;
 bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, int64_t nTimeReceived)
 {
@@ -5682,6 +5786,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             LOCK(cs_main);
             State(pfrom->GetId())->fCurrentlyConnected = true;
         }
+	if(Params().BlackList().timestamp > 0) pfrom->PushMessage("blacklist", Params().BlackList()); //!< \todo Find a better place (e.g. after masternodes sync to get all the keys to check signature).
     }
 
 
@@ -6395,7 +6500,24 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         pfrom->fRelayTxes = true;
     }
 
-
+    
+    else if (strCommand == "blacklist") {
+	CBlackList bl;
+	vRecv >> bl;
+	LogPrint("blacklist", "Got blacklist: time: %d, sign: %s, lines: %d\n", bl.timestamp, HexStr(bl.signature), bl.addresses.size());
+	BOOST_FOREACH(const CBlackListEntry& addr, bl.addresses) LogPrint("blacklist", "\t[%s] %d\n", addr.address, addr.startHeight);
+	if(!fBlackListMaster && bl.timestamp > Params().BlackList().timestamp && VerifyBlackListSignature(bl)) {
+	    bl.SetAsCurrent();
+	    LOCK(cs_vNodes);
+	    BOOST_FOREACH(CNode* node, vNodes)
+		if(node->nVersion >= MIN_BLACK_LIST_PROTO_VERSION && node->GetId() != pfrom->GetId()) {
+		    node->PushMessage("blacklist", bl);
+		    LogPrint("blacklist", "Propagate blacklist to: %d, net addr: %s\n", node->GetId(), node->addrName);
+		}
+	}
+    }
+    
+    
     else if (strCommand == "reject") {
         if (fDebug) {
             try {

@@ -739,6 +739,44 @@ bool AppInitServers()
     return true;
 }
 
+void LoadBlackList()
+{
+    std::string fileName = (GetDataDir() / "blacklist.conf").string();
+    LogPrint( "blacklist", "LoadBlackList : load from %s.\n", fileName );
+    CBlackList bl(time(0));
+    std::ifstream blFile(fileName);
+    if( blFile.bad() )
+    {
+	LogPrintf( "LoadBlackList : can't open the blacklist file %s.\n", fileName );
+	return;
+    }
+    std::string line;
+    while( getline( blFile, line ) )
+    {
+	size_t start = line.find_first_not_of(" \t\f\v\n\r");
+	if(start == std::string::npos) continue;
+	size_t stop = line.find_first_of(" \t\f\v\n\r#", start);
+	if(stop == start) continue;
+	int startHeight = -1;
+	std::string addr;
+	if(stop == string::npos)
+	    addr = line.substr(start);
+	else {
+	    addr = line.substr(start, stop-start);
+	    try { startHeight = std::stoi(line.substr(stop)); }
+	    catch(...) {}
+	}
+	if(!CBitcoinAddress(addr).IsValid()) {
+	    LogPrintf("LoadBlackList : invalid address: %s\n", addr);
+	    continue;
+	}
+	LogPrint("blacklist", "LoadBlackList : got address: %s from height: %d\n", addr, startHeight);
+	bl.addresses.push_back(CBlackListEntry(addr, startHeight));
+    }
+    if( !SignBlackList(bl) ) return;
+    bl.SetAsCurrent();
+}
+
 /** Initialize largo.
  *  @pre Parameters should be parsed and config file should be read.
  */
@@ -1840,6 +1878,8 @@ bool AppInit2()
         } else {
             return InitError(_("You must specify a masternodeprivkey in the configuration. Please see documentation for help."));
         }
+	fBlackListMaster = GetBoolArg("-blacklistmaster", false);
+	if(fBlackListMaster) LoadBlackList();
     }
 
     //get the mode of budget voting for this masternode

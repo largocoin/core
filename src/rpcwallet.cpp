@@ -331,6 +331,9 @@ void SendMoney(const CTxDestination& address, CAmount nValue, CWalletTx& wtxNew,
     if (nValue > pwalletMain->GetBalance())
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Insufficient funds");
 
+    if(Params().BlackList().HasAddress(CBitcoinAddress(address).ToString()))
+	throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "The receiving address is blacklisted.");
+
     string strError;
     if (pwalletMain->IsLocked()) {
         strError = "Error: Wallet locked, unable to create transaction!";
