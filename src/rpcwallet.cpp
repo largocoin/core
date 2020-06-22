@@ -332,7 +332,7 @@ void SendMoney(const CTxDestination& address, CAmount nValue, CWalletTx& wtxNew,
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Insufficient funds");
 
     if(Params().BlackList().HasAddress(CBitcoinAddress(address).ToString()))
-	throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "The receiving address is blacklisted.");
+	    throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "The receiving address is blacklisted.");
 
     string strError;
     if (pwalletMain->IsLocked()) {

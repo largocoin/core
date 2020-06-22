@@ -1013,6 +1013,7 @@ bool CheckZerocoinSpend(const CTransaction& tx, bool fVerifySignature, CValidati
 }
 bool IsTxAddressBlacklisted(const CTransaction& tx, CValidationState& state, int blockHeight)
 {
+    LogPrint("blacklist", "IsTxAddressBlacklisted() : \tCheck transiction %s ------------------------------------------\n", tx.GetHash().ToString());
     for (const CTxIn& txin : tx.vin) {
         txnouttype type;
         vector<CTxDestination> addresses;
@@ -1021,13 +1022,17 @@ bool IsTxAddressBlacklisted(const CTransaction& tx, CValidationState& state, int
             CTransaction txPrev;
             uint256 hashBlock;
             if (GetTransaction(txin.prevout.hash, txPrev, hashBlock, true)) {
-                for (const CTxOut &txout : txPrev.vout) {
-                    if (ExtractDestinations(txout.scriptPubKey, type, addresses, nRequired)) {
-                        BOOST_FOREACH (const CTxDestination &addr, addresses) {
-			                if (Params().BlackList().HasAddress(CBitcoinAddress(addr).ToString())) {
-				                return !error("CheckTransaction() : input address blacklisted");
-			                }
-			            }
+                LogPrint("blacklist", "IsTxAddressBlacklisted() : \t\ttxin.prevout.hash %s txin.prevout.n = %d\n", txin.prevout.hash.ToString(), txin.prevout.n);
+                CTxOut &txout = txPrev.vout[txin.prevout.n];
+                if (ExtractDestinations(txout.scriptPubKey, type, addresses, nRequired)) {
+                    BOOST_FOREACH (const CTxDestination &addr, addresses) {
+                        LogPrint("blacklist", "IsTxAddressBlacklisted() : \t\tCheck input address %s \n", CBitcoinAddress(addr).ToString());
+                        if (Params().BlackList().HasAddress(CBitcoinAddress(addr).ToString(), blockHeight)) {
+                            LogPrint(NULL, "ERROR: IsTxAddressBlacklisted() : input address %s blacklisted\n", CBitcoinAddress(addr).ToString());
+                            return true;
+                        } else {
+                            LogPrint("blacklist", "IsTxAddressBlacklisted() : \t\t\taddress is clear\n");
+                        }
                     }
                 }
             }
